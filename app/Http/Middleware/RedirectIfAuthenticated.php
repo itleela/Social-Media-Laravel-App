@@ -33,7 +33,7 @@ class RedirectIfAuthenticated
                     break;
 
                 default:
-                    $link = 'user-welcome';
+                    $link = 'post.index';
                     break;
             }
 

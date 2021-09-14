@@ -34,7 +34,7 @@ class UserAuthController extends Controller
         ]);
 
         if (Auth::attempt($data)) {
-            return redirect()->route('user-welcome');
+            return redirect()->route('post.index');
 
         } else {
             return 'login failed';
@@ -47,7 +47,7 @@ class UserAuthController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users',
             'password' => 'required',
         ]);
 

@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserAuthController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,23 +19,50 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', [UserAuthController::class, 'login'])->name('login-form');
-
-Route::get('/register', [UserAuthController::class, 'register'])->name('register-form');
-
-
-Route::post('/login', [UserAuthController::class, 'doLogin'])->name('login-form-submit');
-Route::get('/logout', [UserAuthController::class, 'logout'])->name('logout');
+Route::get('/', function () {
+    return 'Routes Changed';
+});
 
 
-Route::post('/register', [UserAuthController::class, 'doRegister'])->name('register-form-submit');
-Route::get('user/welcome', [UserController::class, 'welcome'])->name('user-welcome')->middleware('auth');
+Route::prefix('user')->group(function () {
+
+    Route::get('/', [UserAuthController::class, 'login'])->name('login-form');
+
+    Route::get('/register', [UserAuthController::class, 'register'])->name('register-form');
+
+    Route::post('/login', [UserAuthController::class, 'doLogin'])->name('login-form-submit');
+
+    Route::post('/register', [UserAuthController::class, 'doRegister'])->name('register-form-submit');
+
+
+    Route::middleware('auth')->group(function () {
+
+        Route::get('logout', [UserAuthController::class, 'logout'])->name('logout');
+
+//        Route::resource('post', PostController::class)->except(['show', 'index']);
+
+        Route::resource('post', PostController::class);
+
+        Route::post('{post}/comment', [CommentController::class, 'store'])->name('comment.store');
+
+
+    });
+
+
+});
 
 
 // Admin Login Routes ::::
 
-Route::get('admin/login', [AdminAuthController::class, 'login'])->name('admin-login-form');
-Route::post('admin/login', [AdminAuthController::class, 'doLogin'])->name('admin-login-form-submit');
-Route::get('admin/logout', [AdminAuthController::class, 'logout'])->name('admin-logout');
 
-Route::get('admin/welcome', [AdminController::class, 'welcome'])->name('admin-welcome')->middleware('auth:admin');
+Route::prefix('admin')->group(function () {
+
+    Route::get('/', [AdminAuthController::class, 'login'])->name('admin-login-form');
+    Route::post('login', [AdminAuthController::class, 'doLogin'])->name('admin-login-form-submit');
+
+
+    Route::middleware('auth:admin')->group(function () {
+        Route::get('logout', [AdminAuthController::class, 'logout'])->name('admin-logout');
+        Route::get('welcome', [AdminController::class, 'welcome'])->name('admin-welcome');
+    });
+});
