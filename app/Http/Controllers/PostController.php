@@ -21,6 +21,15 @@ class PostController extends Controller
         return view('user.post.index', compact('posts'));
     }
 
+    public function all()
+    {
+        $posts = Post::query()
+            ->with('user')
+            ->get();
+
+        return view('user.post.all', compact('posts'));
+    }
+
 
     public function create()
     {
@@ -59,6 +68,7 @@ class PostController extends Controller
     public function show(Post $post)
     {
         $comments = Comment::query()
+            ->with('user')
             ->where('post_id', $post->id)
             ->get();
 

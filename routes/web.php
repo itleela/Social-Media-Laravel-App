@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserAuthController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,7 +27,8 @@ Route::get('/', function () {
 
 Route::prefix('user')->group(function () {
 
-    Route::get('/', [UserAuthController::class, 'login'])->name('login-form');
+
+    Route::get('/login', [UserAuthController::class, 'login'])->name('login-form');
 
     Route::get('/register', [UserAuthController::class, 'register'])->name('register-form');
 
@@ -36,14 +38,16 @@ Route::prefix('user')->group(function () {
 
 
     Route::middleware('auth')->group(function () {
-
+        Route::get('/home', [HomeController::class, 'index'])->name('home');
         Route::get('logout', [UserAuthController::class, 'logout'])->name('logout');
+        Route::get('/home', [HomeController::class, 'index'])->name('home');
+//     Route::resource('post', PostController::class)->except(['show', 'index']);
 
-//        Route::resource('post', PostController::class)->except(['show', 'index']);
-
+        Route::get('post/all', [PostController::class, 'all'])->name('post.all');
         Route::resource('post', PostController::class);
 
         Route::post('{post}/comment', [CommentController::class, 'store'])->name('comment.store');
+
 
 
     });

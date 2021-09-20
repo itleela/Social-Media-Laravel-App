@@ -8,7 +8,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="about">About Us</a>
+                    <a class="nav-link" href="{{route('post.all')}}">All Posts</a>
                 </li>
 
                 <li class="nav-item">

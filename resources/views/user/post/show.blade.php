@@ -68,7 +68,14 @@
 
                     @foreach($comments as $data)
                         <ul>
-                            <li>{{$data->comment}} - ({{$data->user->name}})</li>
+                            <li>{{$data->comment}} -(
+                                @if(auth()->id() == $data->user->id)
+                                    YOU
+                                @else
+                                    {{ $data->user->name}}
+                                @endif
+                                 )
+                            </li>
                         </ul>
 
                     @endforeach
