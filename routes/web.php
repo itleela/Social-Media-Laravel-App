@@ -1,12 +1,15 @@
 <?php
-
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserAuthController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Mail\WelcomeMail;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +39,20 @@ Route::prefix('user')->group(function () {
 
     Route::post('/register', [UserAuthController::class, 'doRegister'])->name('register-form-submit');
 
+    //Route for a mailing
+    Route::get('/email', function (){
+        Mail::to('rathvaleela4@gmail.com')->send(new WelcomeMail());
+        return new WelcomeMail();
+    });
+
+    Route::get('/send-testenrollment',[TestController::class,'sendTestNotification']);
+
+
+    Route::get('/password_reset', [ForgotPasswordController::class, 'password_reset'])->name('password_reset-form');
+    Route::get('/send_link', [ForgotPasswordController::class, 'send_Password_link'])->name('send_link-form');
+    Route::get('/password_confirm', [ForgotPasswordController::class, 'confirm'])->name('password_confirm-form');
+
+
 
     Route::middleware('auth')->group(function () {
         Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -59,14 +76,4 @@ Route::prefix('user')->group(function () {
 // Admin Login Routes ::::
 
 
-Route::prefix('admin')->group(function () {
 
-    Route::get('/', [AdminAuthController::class, 'login'])->name('admin-login-form');
-    Route::post('login', [AdminAuthController::class, 'doLogin'])->name('admin-login-form-submit');
-
-
-    Route::middleware('auth:admin')->group(function () {
-        Route::get('logout', [AdminAuthController::class, 'logout'])->name('admin-logout');
-        Route::get('welcome', [AdminController::class, 'welcome'])->name('admin-welcome');
-    });
-});

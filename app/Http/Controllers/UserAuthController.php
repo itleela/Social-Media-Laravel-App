@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WelcomeMail;
 use App\Models\User;
+use App\Notifications\TestEnrollment;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class UserAuthController extends Controller
 {
@@ -50,10 +53,20 @@ class UserAuthController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required',
         ]);
+        $enrollmentData = [
+            'body' => 'You are received a new test notification',
+            'enrollmentText' => 'You are allowed to enroll',
+            'url' => url('http://127.0.0.1:8000/user/home'),
+            'thankyou' => 'You are 14 days to enroll'
+        ];
+
 
         $user = User::create($data);
 
-        return redirect()->route('register-form')->with('status', $user->name . ' Registered Successfully');
+        $user->notify(new TestEnrollment($enrollmentData));
+
+        return $user;
+        //return redirect()->route('register-form')->with('status', $user->name . ' Registered Successfully');
     }
 
 
@@ -64,4 +77,5 @@ class UserAuthController extends Controller
         return redirect()->route('login-form');
 
     }
+
 }

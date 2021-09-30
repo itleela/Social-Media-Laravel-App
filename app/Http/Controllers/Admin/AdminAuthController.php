@@ -1,26 +1,24 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\User;
-use Auth;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Auth;
+use App\Models\User;
+
 
 class AdminAuthController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('guest:admin')->except(['logout']);
     }
-
     public function login()
     {
-        return view('admin.login');
+        return view('admin.auth.login');
     }
-
-
     public function doLogin(Request $request)
     {
 
@@ -36,8 +34,6 @@ class AdminAuthController extends Controller
         }
 
     }
-
-
     public function logout(Request $request): RedirectResponse
     {
         Auth('admin')->logout();

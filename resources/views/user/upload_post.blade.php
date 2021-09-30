@@ -1,5 +1,5 @@
 @extends('welcome')
-@section('title','Login Form')
+@section('title','Upload Post')
 
 @section('content')
 
@@ -10,7 +10,7 @@
             <div class="card">
 
                 <div class="card-header">
-                    Login Form
+                    Upload Post
                 </div>
                 <div class="card-body">
 
@@ -25,34 +25,37 @@
                     @endif
 
 
-                    <form method="post" action="{{route('login-form-submit')}}" class="col-12">
+                    <form method="post" action="#" class="col-12" enctype="multipart/form-data">
 
                         @csrf
 
                         <div class="form-group">
-                            <label for="email">Email address</label>
-                            <input name="email"
-                                   type="email" class="form-control" id="email"
-                                   value="{{old('email')}}"
+                            <label for="email">Name</label>
+                            <input name="name"
+                                   type="text" class="form-control" id="name"
+                                   value="{{old('name')}}"
+                                   placeholder="Enter email">
+
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Descriptions</label>
+                            <input name="description"
+                                   type="textarea" class="form-control" id="email"
+                                   value="{{old('description')}}"
                                    placeholder="Enter email">
 
                         </div>
 
                         <div class="form-group">
-                            <label for="password">Password</label>
-                            <input name="password"
-                                   type="password" class="form-control" id="password" placeholder="Password">
+                            <label for="image">Image</label>
+                            <input name="image"
+                                   type="file" class="form-control" id="image" placeholder="Upload Image">
                         </div>
 
 
                         <div class="d-flex justify-content-between">
-                            <button type="submit" class="btn btn-primary">Login</button>
+                            <button type="submit" class="btn btn-primary">Upload</button>
                             <a href="{{route('register-form')}}">Don't have account? Register</a>
-
-                        </div>
-                        <br>
-                        <div>
-                            <a href="{{route('send_link-form')}}">Forgot Password ?</a>
                         </div>
 
                     </form>
