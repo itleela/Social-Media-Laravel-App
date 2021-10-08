@@ -15,10 +15,12 @@ class AdminAuthController extends Controller
     {
         $this->middleware('guest:admin')->except(['logout']);
     }
+
     public function login()
     {
         return view('admin.auth.login');
     }
+
     public function doLogin(Request $request)
     {
 
@@ -28,12 +30,13 @@ class AdminAuthController extends Controller
         ]);
 
         if (Auth('admin')->attempt($data)) {
-            return redirect()->route('admin-welcome');
+            return redirect()->route('admin-dashboard');
         } else {
             return 'login failed';
         }
 
     }
+
     public function logout(Request $request): RedirectResponse
     {
         Auth('admin')->logout();

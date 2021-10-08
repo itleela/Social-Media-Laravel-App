@@ -29,7 +29,7 @@ class RedirectIfAuthenticated
 
             switch ($guard) {
                 case 'admin':
-                    $link = 'admin-welcome';
+                    $link = 'admin-dashboard';
                     break;
 
                 default:

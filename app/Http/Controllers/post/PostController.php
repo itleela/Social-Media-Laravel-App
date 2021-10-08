@@ -1,25 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\post;
 
+use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use App\Models\Post;
 use File;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-
-    public function index()
-    {
-//        $posts = Post::query()
-//            ->where('user_id', auth()->id())
-//            ->get();
-
-        $posts = auth()->user()->posts()->get();
-        return view('user.post.index', compact('posts'));
-    }
 
     public function all()
     {
@@ -27,18 +19,23 @@ class PostController extends Controller
             ->with('user')
             ->get();
 
-        return view('user.post.all', compact('posts'));
+        return view('admin.user.post.post', compact('posts'));
     }
 
+    public function index()
+    {
+        $posts = auth()->user()->posts()->get();
+        return view('admin.user.post.index', compact('posts'));
+    }
 
     public function create()
     {
         $post = new Post();
-        return view('user.post.create', compact('post'));
+        return view('admin.user.post.create', compact('post'));
     }
 
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
             'name' => 'required|string',
@@ -72,18 +69,18 @@ class PostController extends Controller
             ->where('post_id', $post->id)
             ->get();
 
-        return view('user.post.show', compact('post', 'comments'));
+
+        return view('admin.user.post.show', compact('post', 'comments'));
     }
 
 
     public function edit(Post $post)
     {
-        return view('user.post.edit', compact('post'));
-
+        return view('admin.user.post.edit', compact('post'));
     }
 
 
-    public function update(Request $request, Post $post)
+    public function update(Request $request, Post $post): RedirectResponse
     {
         $data = $request->validate([
             'name' => 'required|string',
@@ -111,10 +108,8 @@ class PostController extends Controller
         return redirect()->route('post.index');
     }
 
-
     public function destroy(Post $post): RedirectResponse
     {
-
         if ($post->image) {
             File::delete(public_path('storage/' . $post->image));
         }

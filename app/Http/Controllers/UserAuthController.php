@@ -19,7 +19,7 @@ class UserAuthController extends Controller
 
     public function login()
     {
-        return view('auth.login');
+        return view('admin.auth.a_user_login');
     }
 
 

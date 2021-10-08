@@ -13,16 +13,32 @@
 </head>
 
 <body class="sb-nav-fixed">
+@if (Route::has('admin-login-form'))
+    @auth('admin')
+        @include('admin.layouts.admin-header')
+    @else
+        @include('admin.layouts.a_user_header')
+    @endauth
+@endif
 
-@include('admin.layouts.admin-header')
 
 <div id="layoutSidenav">
 
+    @if (Route::has('admin-login-form'))
+        @auth('admin')
+            @include('admin.layouts.admin-sidebar')
+        @else
+            @include('admin.layouts.a_user_sidebar')
+        @endauth
+    @endif
 
-    @include('admin.layouts.admin-sidebar')
+
+    <div id="layoutSidenav_content">
+
+        @yield('content')
 
 
-    @yield('content')
+    </div>
 
 
 </div>
